@@ -1,7 +1,7 @@
-FROM nginx:1.17.7
+FROM ruby:2.7
 
-COPY default.conf.template /etc/nginx/conf.d/default.conf.template
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY app /app
+WORKDIR /app
+COPY app.rb Gemfile Gemfile.lock ./
+RUN bundle install
 
-CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
+CMD ["ruby", "./app.rb"]
